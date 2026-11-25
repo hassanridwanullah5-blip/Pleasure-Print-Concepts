@@ -1,54 +1,85 @@
 
-// ===============================
+// ========================================
+// PLEASURE PRINT CONCEPTS
 // REQUEST A QUOTE - WHATSAPP
-// ===============================
+// ========================================
 
 const quoteForm = document.querySelector('#quote-form');
 
-// Replace this with your actual business WhatsApp number.
-// Use international format without +, spaces or hyphens.
-const businessWhatsApp = 'https://wa.me/2348104066912?utm_source=chatgpt.com';
+// Customer service WhatsApp number
+const businessWhatsApp = '2348104066912';
 
-quoteForm.addEventListener('submit', function (event) {
+if (quoteForm) {
 
-    event.preventDefault();
+    quoteForm.addEventListener('submit', function (event) {
 
-    // Collect customer information
-    const formData = new FormData(quoteForm);
+        event.preventDefault();
 
-    const customerName = formData.get('customerName').trim();
-    const customerPhone = formData.get('customerPhone').trim();
-    const customerEmail = formData.get('customerEmail').trim();
-    const service = formData.get('service');
-    const quantity = formData.get('quantity') || 'Not specified';
-    const deadline = formData.get('deadline') || 'Not specified';
-    const projectDetails = formData.get('projectDetails').trim();
+        // Collect form data
+        const formData = new FormData(quoteForm);
 
-    // Prepare WhatsApp message
-    const message = `
+        const customerName = String(formData.get('customerName') || '').trim();
+        const customerPhone = String(formData.get('customerPhone') || '').trim();
+        const customerEmail = String(formData.get('customerEmail') || '').trim();
+
+        const service = String(formData.get('service') || '').trim();
+
+        const quantity =
+            String(formData.get('quantity') || '').trim() || 'Not specified';
+
+        const deadline =
+            String(formData.get('deadline') || '').trim() || 'Not specified';
+
+        const projectDetails =
+            String(formData.get('projectDetails') || '').trim();
+
+
+        // Validate required fields
+        if (!customerName || !customerPhone || !service || !projectDetails) {
+
+            alert('Please complete all required fields before requesting a quote.');
+
+            return;
+        }
+
+
+        // Prepare WhatsApp message
+        const message = `
 *NEW QUOTATION REQUEST*
 *Pleasure Print Concepts*
 
-*Customer Information*
+*CUSTOMER INFORMATION*
+
 Name: ${customerName}
 Phone: ${customerPhone}
 Email: ${customerEmail || 'Not provided'}
 
-*Project Information*
+*PROJECT INFORMATION*
+
 Service: ${service}
 Quantity: ${quantity}
 Required Delivery Date: ${deadline}
 
-*Project Description*
+*PROJECT DESCRIPTION*
+
 ${projectDetails}
 
-Thank you!
+Thank you.
 `;
 
-    // Open WhatsApp with the prepared message
-    const whatsappURL =
-        `https://wa.me/${businessWhatsApp}?text=${encodeURIComponent(message)}`;
 
-    window.location.href = whatsappURL;
+        // Create WhatsApp URL
+        const whatsappURL =
+            `https://wa.me/${businessWhatsApp}?text=${encodeURIComponent(message)}`;
 
-});
+
+        // Open WhatsApp in the current tab
+        window.location.assign(whatsappURL);
+
+    });
+
+} else {
+
+    console.warn('Quote form not found. Check the form ID.');
+
+}
